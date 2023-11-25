@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance;
-
+    [Header("Audio Maxer")]
+    public AudioMixer mixer;
     [Header("Audio Clips")]
     public AudioClip bgmClip;
     public AudioClip jumpClip;
@@ -77,6 +79,18 @@ public class AudioManager : MonoBehaviour
         if(!bgmMusic.isPlaying)
         {
             bgmMusic.Play();
+        }
+    }
+
+    public void ToggleAudio(bool isOn)
+    {
+        if (isOn)
+        {
+            mixer.SetFloat("masterVolume", 0);
+        }
+        else
+        {
+            mixer.SetFloat("masterVolume", -80);
         }
     }
 }

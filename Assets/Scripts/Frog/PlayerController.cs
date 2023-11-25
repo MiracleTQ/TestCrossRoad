@@ -35,6 +35,12 @@ public class PlayerController : MonoBehaviour
 
     private bool isDead;
 
+    [Header("方向指示")]
+    public SpriteRenderer signRenderer;
+    public Sprite upSign;
+    public Sprite leftSign;
+    public Sprite rightSign;
+
     //判断膨胀检测返回的物体
     private RaycastHit2D[] result = new RaycastHit2D[2];
     private void Awake()
@@ -135,6 +141,8 @@ public class PlayerController : MonoBehaviour
             moveDistance = jumpDistance * 2;
             buttonHeld = true;
             AudioManager.instance.SetJumpClip(1);
+
+            signRenderer.gameObject.SetActive(true);
         }
         if (context.canceled && buttonHeld && !isJump)
         {
@@ -146,6 +154,7 @@ public class PlayerController : MonoBehaviour
             }
             buttonHeld = false;
             canJump = true;
+            signRenderer.gameObject.SetActive(false);
         }
     }
     public void GetTouchPosition(InputAction.CallbackContext context)
@@ -159,14 +168,24 @@ public class PlayerController : MonoBehaviour
             if (Mathf.Abs(offset.x) <= 0.7f)
             {
                 dir = Direction.Up;
+                signRenderer.sprite = upSign;
             }
             else if (offset.x < 0.7)
             {
                 dir = Direction.Left;
+                if(transform.lossyScale.x == -1)
+                    signRenderer.sprite = rightSign;
+                else
+                    signRenderer.sprite = leftSign;
             }
             else if (offset.x > 0.7)
             {
                 dir = Direction.Right;
+                if (transform.lossyScale.x == -1)
+                    signRenderer.sprite = leftSign;
+                else
+                    signRenderer.sprite = rightSign;
+                
             }
         }
     }
